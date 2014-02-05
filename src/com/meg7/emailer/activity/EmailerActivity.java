@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.meg7.emailer.R;
+import com.meg7.emailer.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,9 +52,6 @@ import javax.mail.internet.MimeMessage;
  * @author Mostafa Gazar
  */
 public class EmailerActivity extends FragmentActivity {
-
-    private static final String SEND_FROM_EMAIL = "support@lastfm.neu";
-    private static final String SEND_FROM_NAME = "Last.fm Neu";
 
     private static final String regex = " '[a-z,_,0-9,A-Z,.,-]+";
     private final Pattern pattern = Pattern.compile(regex);
@@ -173,7 +171,7 @@ public class EmailerActivity extends FragmentActivity {
 
     private Message createMessage(List<String> emails, String subject, String messageBody, Session session) throws MessagingException, UnsupportedEncodingException {
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(SEND_FROM_EMAIL, SEND_FROM_NAME));
+        message.setFrom(new InternetAddress(Constants.CONFIG_EMAILER_EMAIL, Constants.CONFIG_EMAILER_NAME));
         for (String email : emails) {
             message.addRecipient(Message.RecipientType.BCC, new InternetAddress(email, email));
         }

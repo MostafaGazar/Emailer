@@ -24,6 +24,8 @@ package com.meg7.emailer.util;
 public class Constants {
 
     // Config
+    public static final String CONFIG_EMAILER_EMAIL = "support@someemail.com";
+    public static final String CONFIG_EMAILER_NAME = "Emailer";
     public static final int CONFIG_MAX_RECIPIENTS_PER_EMAIL = 5;
     public static final int CONFIG_MAX_EMAILS_PER_CYCLE = 25;
     public static final int CONFIG_MAX_EMAILS_PER_DAY = 100;
