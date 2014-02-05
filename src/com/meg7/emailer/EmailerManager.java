@@ -21,6 +21,8 @@ import android.content.Context;
 import com.meg7.emailer.util.Constants;
 import com.meg7.emailer.util.Scheduler;
 
+import java.io.IOException;
+
 /**
  * Manage how to do each cycle example.
  *
@@ -28,11 +30,11 @@ import com.meg7.emailer.util.Scheduler;
  */
 public class EmailerManager extends TaskerManager {
 
-    public static final String CONFIG_EMAILER_EMAIL = "support@someemail.com";
-    public static final String CONFIG_EMAILER_NAME = "Emailer";
-    public static final int CONFIG_MAX_RECIPIENTS_PER_EMAIL = 5;
-    public static final int CONFIG_MAX_EMAILS_PER_CYCLE = 25;
-    public static final int CONFIG_MAX_EMAILS_PER_DAY = 100;
+    public static final String FROM_EMAIL = "support@someemail.com";
+    public static final String FROM_NAME = "Emailer";
+    public static final int MAX_RECIPIENTS_PER_EMAIL = 5;
+    public static final int MAX_EMAILS_PER_CYCLE = 25;
+    public static final int MAX_EMAILS_PER_DAY = 100;
 
 
     public EmailerManager(Context context) {
@@ -41,13 +43,22 @@ public class EmailerManager extends TaskerManager {
 
     @Override
     protected void processCycle(int cycle) {
-        // TODO :: Do you thing here.
+        // TODO :: Do your thing here.
 
         // Reschedule the alarm
-        if (getCyclesProcessedTodaySoFar() < EmailerManager.CONFIG_MAX_EMAILS_PER_DAY) {
+        if (getCyclesProcessedTodaySoFar() < EmailerManager.MAX_EMAILS_PER_DAY) {
             Scheduler.scheduleNextWake(mContext);
         } else {
             Scheduler.scheduleNextWake(mContext, Constants.THRESHOLD_DAY);
+        }
+    }
+
+    @Override
+    protected int getCyclesCount() {
+        try {
+            return mContext.getAssets().list("tasks").length;
+        } catch (IOException ignore) {
+            return 0;
         }
     }
 
