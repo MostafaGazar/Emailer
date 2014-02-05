@@ -17,6 +17,10 @@
 package com.meg7.emailer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.meg7.emailer.util.Constants;
 
 /**
  * Manage what to do in each cycle.
@@ -32,30 +36,58 @@ public abstract class TaskerManager {
     }
 
     public int processCycleAndScheduleNext() {
-        int cycleToProcess = getLastProcessedCycles();
+        int cycleToProcess = getLastProcessedCycle() + 1;
 
-        setLastProcessedCycles(cycleToProcess + 1);// TODO :: Only do if less than max.
+        if (cycleToProcess < getCyclesCount()) {
+            processCycle(cycleToProcess);
 
+            setLastProcessedCycle(cycleToProcess);
+        }
 
         return incrementCyclesProcessedTodaySoFar();
     }
 
     protected abstract void processCycle(int cycle);
 
+    protected abstract int getCyclesCount();
+
     public int getCyclesProcessedTodaySoFar() {
-        return 0;
+        return PreferenceManager.getDefaultSharedPreferences(mContext).
+                getInt(Constants.PREF_CYCLES_TODAY_SO_FAR, 0);
     }
 
     public int incrementCyclesProcessedTodaySoFar() {
-        return 0;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        int cyclesTodaySoFar = sharedPreferences.getInt(Constants.PREF_CYCLES_TODAY_SO_FAR, 0);
+        cyclesTodaySoFar = cyclesTodaySoFar + 1;
+
+        sharedPreferences.
+                edit().
+                putInt(Constants.PREF_CYCLES_TODAY_SO_FAR, cyclesTodaySoFar).
+                commit();
+
+        return cyclesTodaySoFar;
     }
 
-    public int getLastProcessedCycles() {
-        return 0;
+    public void resetCyclesProcessedTodaySoFar() {
+        PreferenceManager.
+                getDefaultSharedPreferences(mContext).
+                edit().
+                putInt(Constants.PREF_CYCLES_TODAY_SO_FAR, 0).
+                commit();
     }
 
-    public void setLastProcessedCycles(int cycle) {
+    public int getLastProcessedCycle() {
+        return PreferenceManager.getDefaultSharedPreferences(mContext).
+                getInt(Constants.PREF_LAST_PROCESSED_CYCLE, 0);
+    }
 
+    public void setLastProcessedCycle(int cycle) {
+        PreferenceManager.
+                getDefaultSharedPreferences(mContext).
+                edit().
+                putInt(Constants.PREF_LAST_PROCESSED_CYCLE, cycle).
+                commit();
     }
 
 

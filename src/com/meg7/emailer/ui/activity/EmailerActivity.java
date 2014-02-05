@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.meg7.emailer.EmailerManager;
 import com.meg7.emailer.R;
-import com.meg7.emailer.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -172,7 +171,7 @@ public class EmailerActivity extends FragmentActivity {
 
     private Message createMessage(List<String> emails, String subject, String messageBody, Session session) throws MessagingException, UnsupportedEncodingException {
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(EmailerManager.CONFIG_EMAILER_EMAIL, EmailerManager.CONFIG_EMAILER_NAME));
+        message.setFrom(new InternetAddress(EmailerManager.FROM_EMAIL, EmailerManager.FROM_NAME));
         for (String email : emails) {
             message.addRecipient(Message.RecipientType.BCC, new InternetAddress(email, email));
         }
