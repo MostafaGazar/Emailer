@@ -1,7 +1,7 @@
 # assets files
 assets/
 # config file
-values/config.xml
+*/values/config.xml
 
 # built application files
 *.apk
