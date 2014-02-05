@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.meg7.emailer.fragment;
+package com.meg7.emailer.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;

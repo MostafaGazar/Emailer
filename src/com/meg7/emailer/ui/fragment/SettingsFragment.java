@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.meg7.emailer.fragment;
+package com.meg7.emailer.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,11 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Fragment for showing report after each sending cycle.
+ * Fragment for showing editing email template before execution.
  *
  * @author Mostafa Gazar
  */
-public class ReportFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

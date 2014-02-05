@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.meg7.emailer.activity;
+package com.meg7.emailer.ui.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.meg7.emailer.EmailerManager;
 import com.meg7.emailer.R;
 import com.meg7.emailer.util.Constants;
 
@@ -171,7 +172,7 @@ public class EmailerActivity extends FragmentActivity {
 
     private Message createMessage(List<String> emails, String subject, String messageBody, Session session) throws MessagingException, UnsupportedEncodingException {
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(Constants.CONFIG_EMAILER_EMAIL, Constants.CONFIG_EMAILER_NAME));
+        message.setFrom(new InternetAddress(EmailerManager.CONFIG_EMAILER_EMAIL, EmailerManager.CONFIG_EMAILER_NAME));
         for (String email : emails) {
             message.addRecipient(Message.RecipientType.BCC, new InternetAddress(email, email));
         }

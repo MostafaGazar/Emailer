@@ -22,21 +22,22 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.meg7.emailer.util.Scheduler;
+import com.meg7.emailer.EmailerManager;
+import com.meg7.emailer.TaskerManager;
 import com.meg7.emailer.util.ConnectionHelper;
 import com.meg7.emailer.util.MLog;
 
 /**
- * Emailer service for sending emails by rate matching user settings.
+ * Tasker service for doing some task by rate matching user settings.
  *
  * @author Mostafa Gazar
  */
-public class EmailerService extends IntentService {
+public class TaskerService extends IntentService {
 
-    public static final String TAG = EmailerService.class.getSimpleName();
+    public static final String TAG = TaskerService.class.getSimpleName();
 
-    public EmailerService() {
-        super(EmailerService.class.getSimpleName());
+    public TaskerService() {
+        super(TaskerService.class.getSimpleName());
     }
 
     @Override
@@ -66,11 +67,9 @@ public class EmailerService extends IntentService {
             // Register Connectivity listener.
             ConnectionHelper.registerConnectivityListener(getApplicationContext());
         } else {
-            // TODO :: Do some magic.
-            MLog.i(TAG, "Emails sent successfully");
-
-            // Reschedule the alarm
-            Scheduler.scheduleNextWake(this);
+            TaskerManager cyclesManager = new EmailerManager(getApplicationContext());
+            cyclesManager.processCycleAndScheduleNext();
+            MLog.i(TAG, "Done successfully");
         }
     }
 

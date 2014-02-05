@@ -33,6 +33,10 @@ public class Scheduler {
     private static final String TAG = Scheduler.class.getSimpleName();
 
     public static void scheduleNextWake(Context context) {
+        scheduleNextWake(context, Constants.THRESHOLD_MIN_PERIOD_BETWEEN_CYCLES);
+    }
+
+    public static void scheduleNextWake(Context context, int threshold) {
         // Cancel all previously scheduled wakes.
         cancelScheduledWakes(context);
 
@@ -40,10 +44,10 @@ public class Scheduler {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, Constants.THRESHOLD_MIN_PERIOD_BETWEEN_CYCLES);
+        calendar.add(Calendar.SECOND, threshold);
         alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), getEmailerWakeIntent(context));
 
-        MLog.d(TAG, "Emailer scheduled in " + Constants.THRESHOLD_MIN_PERIOD_BETWEEN_CYCLES / 60 + " minutes");
+        MLog.d(TAG, "Emailer scheduled in " + threshold / 60 + " minutes");
     }
 
     public static void cancelScheduledWakes(Context context) {
@@ -52,7 +56,7 @@ public class Scheduler {
     }
 
     private static PendingIntent getEmailerWakeIntent(Context context) {
-        Intent intent = new Intent(Constants.INTENT_ACTION_WAKE_EMAILER_UP);
+        Intent intent = new Intent(Constants.INTENT_ACTION_WAKE_TASKER_UP);
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

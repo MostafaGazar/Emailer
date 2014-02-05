@@ -23,18 +23,17 @@ package com.meg7.emailer.util;
  */
 public class Constants {
 
-    // Config
-    public static final String CONFIG_EMAILER_EMAIL = "support@someemail.com";
-    public static final String CONFIG_EMAILER_NAME = "Emailer";
-    public static final int CONFIG_MAX_RECIPIENTS_PER_EMAIL = 5;
-    public static final int CONFIG_MAX_EMAILS_PER_CYCLE = 25;
-    public static final int CONFIG_MAX_EMAILS_PER_DAY = 100;
+    // Preferences
+    public static final String PREF_CYCLES_OVERALL = "cyclesOverall";
+    public static final String PREF_CYCLES_TODAY_SO_FAR = "cyclesTodaySoFar";
+    public static final String PREF_LAST_PROCESSED_CYCLE = "lastProcessedCycle";
 
     // Intents
-    public static final String INTENT_ACTION_WAKE_EMAILER_UP = "com.meg7.emailer.action.ACTION_WAKE_EMAILER_UP";
+    public static final String INTENT_ACTION_WAKE_TASKER_UP = "com.meg7.emailer.action.ACTION_WAKE_TASKER_UP";
 
     // Thresholds
     public static final int THRESHOLD_MAX_SEND_ATTEMPTS = 3;
     public static final int THRESHOLD_MIN_PERIOD_BETWEEN_CYCLES = 60 * 60 * 1000;// An hour.
+    public static final int THRESHOLD_DAY = 24 * 60 * 60 * 1000;// An hour.
 
 }
