@@ -17,11 +17,30 @@
 package com.meg7.emailer;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.meg7.emailer.util.Constants;
+import com.meg7.emailer.util.MLog;
 import com.meg7.emailer.util.Scheduler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Manage how to do each cycle example.
@@ -30,12 +49,11 @@ import java.io.IOException;
  */
 public class EmailerManager extends TaskerManager {
 
-    public static final String FROM_EMAIL = "support@someemail.com";
-    public static final String FROM_NAME = "Emailer";
+    private static final String TAG = EmailerManager.class.getSimpleName();
+
     public static final int MAX_RECIPIENTS_PER_EMAIL = 5;
     public static final int MAX_EMAILS_PER_CYCLE = 25;
     public static final int MAX_EMAILS_PER_DAY = 100;
-
 
     public EmailerManager(Context context) {
         super(context);
@@ -43,7 +61,53 @@ public class EmailerManager extends TaskerManager {
 
     @Override
     protected void processCycle(int cycle) {
-        // TODO :: Do your thing here.
+        // Do your thing here.
+        final String username = PreferenceUtils.getEmailUsername(mContext);
+        final String password = PreferenceUtils.getEmailPassword(mContext);
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            // TODO :: Populate some sort of error to UI.
+            return;
+        }
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        MLog.v(TAG, "Session created for :: " + username);
+
+        final String fromEmail = PreferenceUtils.getFromEmail(mContext);
+        final String fromName = PreferenceUtils.getFromName(mContext);
+        final String subject = PreferenceUtils.getEmailSubject(mContext);
+        final String message = PreferenceUtils.getEmailMessage(mContext);
+
+        List<String> all = readEmailsFromFile(cycle + ".txt");
+        List<String> emails;
+        List<Message> messages = new ArrayList<Message>();
+
+        int size = all.size();
+        int messagesCount = (int) Math.ceil(size / (MAX_RECIPIENTS_PER_EMAIL * 1d));
+        MLog.v(TAG, "Emails :: " + size + ", messages count :: " + messagesCount);
+        MLog.v(TAG, "Creating messages");
+        for (int i = 0; i < messagesCount; i ++) {
+            try {
+                emails = all.subList(i * MAX_RECIPIENTS_PER_EMAIL, Math.min(i * MAX_RECIPIENTS_PER_EMAIL + MAX_RECIPIENTS_PER_EMAIL, size));
+
+                messages.add(createMessage(emails, fromEmail, fromName, subject, message, session));
+            } catch (Exception e) {
+                MLog.e(TAG, e.toString());
+            }
+
+        }
+
+        sendMessages(messages);
 
         // Reschedule the alarm
         if (getCyclesProcessedTodaySoFar() < EmailerManager.MAX_EMAILS_PER_DAY) {
@@ -60,6 +124,122 @@ public class EmailerManager extends TaskerManager {
         } catch (IOException ignore) {
             return 0;
         }
+    }
+
+    private List<String> readEmailsFromFile(String fileName) {
+        List<String> emails = new ArrayList<String>();
+
+        InputStream inputStream = null;
+        BufferedReader reader = null;
+        try {
+            inputStream = mContext.getAssets().open(fileName);
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                emails.add(line);
+            }
+        } catch (Exception e) {
+            MLog.e(TAG, e.toString());
+        } finally {
+            if (inputStream != null) try { inputStream.close(); } catch (IOException e) { }
+            if (reader != null) try { reader.close(); } catch (IOException e) { }
+        }
+
+        return emails;
+    }
+
+    private Message createMessage(List<String> emails,
+                                  String fromEmail, String fromName,
+                                  String subject, String text,
+                                  Session session) throws MessagingException, UnsupportedEncodingException {
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(fromEmail, fromName));
+        for (String email : emails) {
+            message.addRecipient(Message.RecipientType.BCC, new InternetAddress(email, email));
+        }
+        message.setSubject(subject);
+        message.setText(text);
+        return message;
+    }
+
+    private void sendMessages(List<Message> messages) {
+        for (Message message : messages) {
+            try {
+                Transport.send(message);
+
+                // TODO :: publish progress
+
+            } catch (Exception e) {
+                MLog.e(TAG, e.toString());
+            }
+        }
+    }
+
+    public static class PreferenceUtils {
+
+        public static final String PREF_EMAIL_USERNAME = "emailUsername";
+        public static final String PREF_EMAIL_PASSWORD = "emailPassword";
+
+        public static final String PREF_FROM_EMAIL = "fromEmail";
+        public static final String PREF_FROM_NAME = "fromName";
+        public static final String PREF_EMAIL_SUBJECT  = "emailSubject";
+        public static final String PREF_EMAIL_MESSAGE  = "emailMessage";
+
+
+        private static String getPrefValue(Context context, String key, String defaultValue) {
+            return PreferenceManager.getDefaultSharedPreferences(context).
+                    getString(key, defaultValue);
+        }
+        private static void setPrefValue(Context context, String key, String value) {
+            PreferenceManager.getDefaultSharedPreferences(context).
+                    edit().
+                    putString(key, value).
+                    commit();
+        }
+
+        public static String getEmailUsername(Context context) {
+            return getPrefValue(context, PREF_EMAIL_USERNAME, null);
+        }
+        public static void setEmailUsername(Context context, String username) {
+            setPrefValue(context, PREF_EMAIL_USERNAME, username);
+        }
+
+        public static String getEmailPassword(Context context) {
+            return getPrefValue(context, PREF_EMAIL_PASSWORD, null);
+        }
+        public static void setEmailPassword(Context context, String password) {
+            setPrefValue(context, PREF_EMAIL_PASSWORD, password);
+        }
+
+        public static String getFromEmail(Context context) {
+            return getPrefValue(context, PREF_FROM_EMAIL, null);
+        }
+        public static void setFromEmail(Context context, String fromEmail) {
+            setPrefValue(context, PREF_FROM_EMAIL, fromEmail);
+        }
+
+        public static String getFromName(Context context) {
+            return getPrefValue(context, PREF_FROM_NAME, null);
+        }
+        public static void setFromName(Context context, String fromName) {
+            setPrefValue(context, PREF_FROM_NAME, fromName);
+        }
+
+        public static String getEmailSubject(Context context) {
+            return getPrefValue(context, PREF_EMAIL_SUBJECT, null);
+        }
+        public static void setEmailSubject(Context context, String subject) {
+            setPrefValue(context, PREF_EMAIL_SUBJECT, subject);
+        }
+
+        public static String getEmailMessage(Context context) {
+            return getPrefValue(context, PREF_EMAIL_MESSAGE, null);
+        }
+        public static void setEmailMessage(Context context, String message) {
+            setPrefValue(context, PREF_EMAIL_MESSAGE, message);
+        }
+
     }
 
 }
