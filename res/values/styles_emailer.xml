@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2014 Mostafa Gazar
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <!-- http://jgilfelt.github.io/android-actionbarstylegenerator/#name=emailer&compat=holo&theme=dark&actionbarstyle=solid&texture=0&hairline=0&neutralPressed=1&backColor=394264%2C100&secondaryColor=50597b%2C100&tabColor=11a8ab%2C100&tertiaryColor=50597b%2C100&accentColor=1f253d%2C100&cabBackColor=cc324b%2C100&cabHighlightColor=e64c65%2C100 -->
+    <style name="Theme.Emailer" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_emailer</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Emailer</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Emailer</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Emailer</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Emailer</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Emailer</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_emailer</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_emailer</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Emailer</item>
+
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <style name="ActionBar.Solid.Emailer" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_emailer</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_emailer</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_emailer</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Emailer</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Emailer" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_emailer</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Emailer</item>
+    </style>
+
+    <style name="PopupMenu.Emailer" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_emailer</item>	
+    </style>
+
+    <style name="DropDownListView.Emailer" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_emailer</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Emailer" parent="@android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_emailer</item>
+    </style>
+
+    <style name="DropDownNav.Emailer" parent="@android:style/Widget.Holo.Spinner">
+        <item name="android:background">@drawable/spinner_background_ab_emailer</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_emailer</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_emailer</item>
+    </style>
+    
+    <style name="ProgressBar.Emailer" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_emailer</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Emailer" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_emailer</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Emailer.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Emailer</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Emailer</item>
+    </style>
+
+</resources>

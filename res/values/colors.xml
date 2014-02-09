@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright 2014 Mostafa Gazar
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <color name="text">#ffffff</color>
+    <color name="background">#1f253d</color>
+
+    <!-- Colors -->
+    <color name="white">#ffffff</color>
+
+    <color name="gray">#787878</color>
+
+    <color name="turquoise">#11a8ab</color>
+
+    <color name="purple">#394264</color>
+    <color name="purple_lighter">#50597b</color>
+
+    <color name="red">#cc324b</color>
+    <color name="red_lighter">#e64c65</color>
+
+    <color name="blue">#1a4e95</color>
+    <color name="blue_lighter">#3468af</color>
+
+
+
+</resources>
