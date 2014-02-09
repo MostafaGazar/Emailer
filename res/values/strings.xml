@@ -6,4 +6,23 @@
 
     <string name="emailer_service">Emailer service</string>
 
+    <!-- Settings fragment -->
+    <string name="settings">Settings</string>
+    <string name="restoreDefaults">Restore defaults</string>
+    <string name="update">Update</string>
+
+    <!-- Progress fragment -->
+    <string name="progress">Progress</string>
+    <string name="progress_success">Sent</string>
+    <string name="progress_failed">Failed</string>
+
+    <!-- Report fragment -->
+    <string name="report">Report</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_from_email">From email</string>
+    <string name="hint_from_name">From name</string>
+    <string name="hint_subject">Subject</string>
+    <string name="hint_message">Message</string>
+
 </resources>

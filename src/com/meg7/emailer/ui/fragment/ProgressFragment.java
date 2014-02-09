@@ -23,16 +23,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.meg7.emailer.R;
+
 /**
  * Fragment for showing stats.
  *
  * @author Mostafa Gazar
  */
-public class StatsFragment extends Fragment {
+public class ProgressFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);// inflater.inflate(R.layout.fragment_about, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_progress, container, false);
 
         Context context = getActivity();
 
