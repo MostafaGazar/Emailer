@@ -17,6 +17,10 @@
 
 <resources>
 
+    <style name="Theme.Emailer.NoActionBar" parent="@android:style/Theme.Holo.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
     <!-- http://jgilfelt.github.io/android-actionbarstylegenerator/#name=emailer&compat=holo&theme=dark&actionbarstyle=solid&texture=0&hairline=0&neutralPressed=1&backColor=394264%2C100&secondaryColor=50597b%2C100&tabColor=11a8ab%2C100&tertiaryColor=50597b%2C100&accentColor=1f253d%2C100&cabBackColor=cc324b%2C100&cabHighlightColor=e64c65%2C100 -->
     <style name="Theme.Emailer" parent="@android:style/Theme.Holo">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_emailer</item>
