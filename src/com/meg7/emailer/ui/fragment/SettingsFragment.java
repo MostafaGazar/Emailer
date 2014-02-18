@@ -16,12 +16,13 @@
 
 package com.meg7.emailer.ui.fragment;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.meg7.emailer.R;
 
@@ -30,14 +31,78 @@ import com.meg7.emailer.R;
  *
  * @author Mostafa Gazar
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener {
+
+    private EditText mUsernameEdt;
+    private EditText mPasswordEdt;
+    private EditText mFromEmailEdt;
+    private EditText mFromNameEdt;
+    private EditText mSubjectEdt;
+    private EditText mMessageEdt;
+
+    private View mRestoreDefaultsBtn;
+    private View mUpdateBtn;
+
+
+    public static ProgressFragment newInstance() {
+        ProgressFragment fragment = new ProgressFragment();
+
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        Context context = getActivity();
+        if (rootView != null) {
+            mUsernameEdt = (EditText) rootView.findViewById(R.id.usernameEdt);
+            mPasswordEdt = (EditText) rootView.findViewById(R.id.passwordEdt);
+            mFromEmailEdt = (EditText) rootView.findViewById(R.id.fromEmailEdt);
+            mFromNameEdt = (EditText) rootView.findViewById(R.id.fromNameEdt);
+            mSubjectEdt = (EditText) rootView.findViewById(R.id.subjectEdt);
+            mMessageEdt = (EditText) rootView.findViewById(R.id.messageEdt);
+
+            mRestoreDefaultsBtn = rootView.findViewById(R.id.restoreDefaultsBtn);
+            mUpdateBtn = rootView.findViewById(R.id.updateBtn);
+        }
 
         return rootView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initWidgets();
+    }
+
+    private void initWidgets(){
+        Bundle args = getArguments();
+        if (args == null) {
+            return;
+        }
+
+        // Update views.
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+
+        // TODO :: Update views.
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.restoreDefaultsBtn:
+                break;
+            case R.id.updateBtn:
+                break;
+        }
+    }
+
+
 }

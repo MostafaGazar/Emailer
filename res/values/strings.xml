@@ -11,6 +11,9 @@
     <string name="restoreDefaults">Restore defaults</string>
     <string name="update">Update</string>
 
+    <string name="run">Run</string>
+    <string name="stop">Stop</string>
+
     <!-- Progress fragment -->
     <string name="progress">Progress</string>
     <string name="progress_success">Sent</string>
