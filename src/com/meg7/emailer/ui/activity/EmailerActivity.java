@@ -22,8 +22,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import com.meg7.emailer.R;
+import com.meg7.emailer.TaskerHelper;
 import com.meg7.emailer.ui.fragment.HeadlessFragment;
 import com.meg7.emailer.ui.fragment.ProgressFragment;
 import com.meg7.emailer.ui.fragment.SettingsFragment;
@@ -40,6 +43,8 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
     private HeadlessFragment mHeadlessFragment;
 
     private FragmentsPagerAdapter mFragmentsAdapter;
+
+    private ToggleButton mRunTglBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,20 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         mFragmentsAdapter = new FragmentsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(mFragmentsAdapter);
+
+        mRunTglBtn = (ToggleButton) findViewById(R.id.runTglBtn);
+        mRunTglBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    // Start task.
+                    TaskerHelper.startTasker(getApplicationContext());
+                } else {
+                    // Stop and cancel all planed tasks.
+                    TaskerHelper.cancelFutureTasks(getApplicationContext());
+                }
+            }
+        });
     }
 
     private class FragmentsPagerAdapter extends FragmentStatePagerAdapter {

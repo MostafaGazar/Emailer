@@ -30,6 +30,7 @@ public class Constants {
 
     // Intents
     public static final String INTENT_ACTION_WAKE_TASKER_UP = "com.meg7.emailer.action.ACTION_WAKE_TASKER_UP";
+    public static final String ACTION_UPDATE_PROGRESS_FRAGMENT = "com.meg7.emailer.action.ACTION_UPDATE_PROGRESS_FRAGMENT";
 
     // Thresholds
     public static final int THRESHOLD_MAX_SEND_ATTEMPTS = 3;

@@ -17,14 +17,21 @@
 package com.meg7.emailer.ui.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.meg7.emailer.R;
+import com.meg7.emailer.util.Constants;
+import com.meg7.emailer.util.ProgressPreferenceUtils;
 
 import java.text.NumberFormat;
 
@@ -74,20 +81,47 @@ public class ProgressFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateProgress();
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProgressReceiver,
+                new IntentFilter(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProgressReceiver);
+    }
+
+    private BroadcastReceiver mUpdateProgressReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (Constants.ACTION_UPDATE_PROGRESS_FRAGMENT.equals(action)) {
+                updateProgress();
+            }
+        }
+    };
+
     private void updateProgress() {
+        float progressPercentage;
+        int sentCount;
+        int failedCount;
+
         Bundle args = getArguments();
         if (args == null ||
                 !args.containsKey(ARGS_PROGRESS_PERCENTAGE) ||
                 !args.containsKey(ARGS_SENT_COUNT) ||
                 !args.containsKey(ARGS_FAILED_COUNT)) {
-            return;
+            progressPercentage = ProgressPreferenceUtils.getProgressPercentage(getActivity());
+            sentCount = ProgressPreferenceUtils.getSentCount(getActivity());
+            failedCount = ProgressPreferenceUtils.getFailedCount(getActivity());
+        } else {
+            progressPercentage = args.getFloat(ARGS_PROGRESS_PERCENTAGE);
+            sentCount = args.getInt(ARGS_SENT_COUNT);
+            failedCount = args.getInt(ARGS_FAILED_COUNT);
         }
-
-        float progressPercentage = args.getFloat(ARGS_PROGRESS_PERCENTAGE);
-        int sentCount = args.getInt(ARGS_SENT_COUNT);
-        int failedCount = args.getInt(ARGS_FAILED_COUNT);
 
         // Update views.
         Activity activity = getActivity();

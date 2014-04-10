@@ -35,17 +35,30 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/actions_bar_bg"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/app_name"
+            android:layout_weight="1"
+            android:text="@string/actions_title"
             android:textAllCaps="true"
+            android:padding="16dp"
             android:textAppearance="@android:style/TextAppearance.Medium"
             android:textColor="@color/gray" />
+
+        <ToggleButton
+            android:id="@+id/runTglBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/btn_toggle_general_bg"
+            android:paddingRight="24dp"
+            android:paddingLeft="24dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textOn="@string/stop"
+            android:textOff="@string/run"/>
 
     </LinearLayout>
 

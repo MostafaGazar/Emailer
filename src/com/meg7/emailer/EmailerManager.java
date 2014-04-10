@@ -17,11 +17,13 @@
 package com.meg7.emailer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.meg7.emailer.util.Constants;
 import com.meg7.emailer.util.MLog;
+import com.meg7.emailer.util.ProgressPreferenceUtils;
 import com.meg7.emailer.util.Scheduler;
 
 import java.io.BufferedReader;
@@ -32,7 +34,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -51,9 +52,11 @@ public class EmailerManager extends TaskerManager {
 
     private static final String TAG = EmailerManager.class.getSimpleName();
 
+    public static final int MAX_TASKS_PER_DAY = 4;
+
     public static final int MAX_RECIPIENTS_PER_EMAIL = 5;
-    public static final int MAX_EMAILS_PER_CYCLE = 25;
-    public static final int MAX_EMAILS_PER_DAY = 100;
+//    public static final int MAX_EMAILS_PER_CYCLE = 25;
+//    public static final int MAX_EMAILS_PER_DAY = 100;
 
     public EmailerManager(Context context) {
         super(context);
@@ -110,10 +113,12 @@ public class EmailerManager extends TaskerManager {
         sendMessages(messages);
 
         // Reschedule the alarm
-        if (getCyclesProcessedTodaySoFar() < EmailerManager.MAX_EMAILS_PER_DAY) {
+        if (getCyclesProcessedTodaySoFar() < EmailerManager.MAX_TASKS_PER_DAY) {
             Scheduler.scheduleNextWake(mContext);
         } else {
             Scheduler.scheduleNextWake(mContext, Constants.THRESHOLD_DAY);
+
+            resetCyclesProcessedTodaySoFar();
         }
     }
 
@@ -164,15 +169,27 @@ public class EmailerManager extends TaskerManager {
     }
 
     private void sendMessages(List<Message> messages) {
+        ProgressPreferenceUtils.setProgressPercentage(mContext, 0);
+        ProgressPreferenceUtils.setSentCount(mContext, 0);
+        ProgressPreferenceUtils.setFailedCount(mContext, 0);
+
+        int position = 0;
+        int count = messages.size();
         for (Message message : messages) {
+            ProgressPreferenceUtils.setProgressPercentage(mContext, position * 100 / count);
+            position += 1;
+
             try {
                 Transport.send(message);
 
-                // TODO :: publish progress
-
+                ProgressPreferenceUtils.incrementSentCount(mContext);
             } catch (Exception e) {
+                ProgressPreferenceUtils.incrementFailedCount(mContext);
+
                 MLog.e(TAG, e.toString());
             }
+
+            mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
         }
     }
 
@@ -199,42 +216,42 @@ public class EmailerManager extends TaskerManager {
         }
 
         public static String getEmailUsername(Context context) {
-            return getPrefValue(context, PREF_EMAIL_USERNAME, null);
+            return getPrefValue(context, PREF_EMAIL_USERNAME, context.getString(R.string.default_email));
         }
         public static void setEmailUsername(Context context, String username) {
             setPrefValue(context, PREF_EMAIL_USERNAME, username);
         }
 
         public static String getEmailPassword(Context context) {
-            return getPrefValue(context, PREF_EMAIL_PASSWORD, null);
+            return getPrefValue(context, PREF_EMAIL_PASSWORD, context.getString(R.string.default_password));
         }
         public static void setEmailPassword(Context context, String password) {
             setPrefValue(context, PREF_EMAIL_PASSWORD, password);
         }
 
         public static String getFromEmail(Context context) {
-            return getPrefValue(context, PREF_FROM_EMAIL, null);
+            return getPrefValue(context, PREF_FROM_EMAIL, context.getString(R.string.default_from_email));
         }
         public static void setFromEmail(Context context, String fromEmail) {
             setPrefValue(context, PREF_FROM_EMAIL, fromEmail);
         }
 
         public static String getFromName(Context context) {
-            return getPrefValue(context, PREF_FROM_NAME, null);
+            return getPrefValue(context, PREF_FROM_NAME, context.getString(R.string.default_from_name));
         }
         public static void setFromName(Context context, String fromName) {
             setPrefValue(context, PREF_FROM_NAME, fromName);
         }
 
         public static String getEmailSubject(Context context) {
-            return getPrefValue(context, PREF_EMAIL_SUBJECT, null);
+            return getPrefValue(context, PREF_EMAIL_SUBJECT, context.getString(R.string.default_subject));
         }
         public static void setEmailSubject(Context context, String subject) {
             setPrefValue(context, PREF_EMAIL_SUBJECT, subject);
         }
 
         public static String getEmailMessage(Context context) {
-            return getPrefValue(context, PREF_EMAIL_MESSAGE, null);
+            return getPrefValue(context, PREF_EMAIL_MESSAGE, context.getString(R.string.default_message));
         }
         public static void setEmailMessage(Context context, String message) {
             setPrefValue(context, PREF_EMAIL_MESSAGE, message);

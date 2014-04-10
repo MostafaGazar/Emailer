@@ -16,7 +16,7 @@
 
 package com.meg7.emailer.ui.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.meg7.emailer.EmailerManager;
 import com.meg7.emailer.R;
 
 /**
@@ -39,10 +40,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private EditText mFromNameEdt;
     private EditText mSubjectEdt;
     private EditText mMessageEdt;
-
-    private View mRestoreDefaultsBtn;
-    private View mUpdateBtn;
-
 
     public static ProgressFragment newInstance() {
         ProgressFragment fragment = new ProgressFragment();
@@ -65,32 +62,22 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
             mSubjectEdt = (EditText) rootView.findViewById(R.id.subjectEdt);
             mMessageEdt = (EditText) rootView.findViewById(R.id.messageEdt);
 
-            mRestoreDefaultsBtn = rootView.findViewById(R.id.restoreDefaultsBtn);
-            mUpdateBtn = rootView.findViewById(R.id.updateBtn);
+            // Update views.
+            Context context = getActivity();
+            mUsernameEdt.setText(EmailerManager.PreferenceUtils.getEmailUsername(context));
+            mPasswordEdt.setText(EmailerManager.PreferenceUtils.getEmailPassword(context));
+            mFromEmailEdt.setText(EmailerManager.PreferenceUtils.getFromEmail(context));
+            mFromNameEdt.setText(EmailerManager.PreferenceUtils.getFromName(context));
+            mSubjectEdt.setText(EmailerManager.PreferenceUtils.getEmailSubject(context));
+            mMessageEdt.setText(EmailerManager.PreferenceUtils.getEmailMessage(context));
+
+            View restoreDefaultsBtn = rootView.findViewById(R.id.restoreDefaultsBtn);
+            restoreDefaultsBtn.setOnClickListener(this);
+            View updateBtn = rootView.findViewById(R.id.updateBtn);
+            updateBtn.setOnClickListener(this);
         }
 
         return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initWidgets();
-    }
-
-    private void initWidgets(){
-        Bundle args = getArguments();
-        if (args == null) {
-            return;
-        }
-
-        // Update views.
-        Activity activity = getActivity();
-        if (activity == null) {
-            return;
-        }
-
-        // TODO :: Update views.
     }
 
     @Override
@@ -98,11 +85,31 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         int id = view.getId();
         switch (id) {
             case R.id.restoreDefaultsBtn:
+                restoreDefaultSettings();
                 break;
             case R.id.updateBtn:
+                updateSettings();
                 break;
         }
     }
 
+    private void updateSettings() {
+        Context context = getActivity();
+        EmailerManager.PreferenceUtils.setEmailUsername(context, mUsernameEdt.getText().toString());
+        EmailerManager.PreferenceUtils.setEmailPassword(context, mPasswordEdt.getText().toString());
+        EmailerManager.PreferenceUtils.setFromEmail(context, mFromEmailEdt.getText().toString());
+        EmailerManager.PreferenceUtils.setFromName(context, mFromNameEdt.getText().toString());
+        EmailerManager.PreferenceUtils.setEmailSubject(context, mSubjectEdt.getText().toString());
+        EmailerManager.PreferenceUtils.setEmailMessage(context, mMessageEdt.getText().toString());
+    }
+
+    private void restoreDefaultSettings() {
+        mUsernameEdt.setText(getString(R.string.default_email));
+        mPasswordEdt.setText(getString(R.string.default_password));
+        mFromEmailEdt.setText(getString(R.string.default_from_email));
+        mFromNameEdt.setText(getString(R.string.default_from_name));
+        mSubjectEdt.setText(getString(R.string.default_subject));
+        mMessageEdt.setText(getString(R.string.default_message));
+    }
 
 }

@@ -35,21 +35,21 @@ public class ProgressPreferenceUtils {
         setPrefValue(context, PREF_PROGRESS_PERCENTAGE, progressPercentage);
     }
 
-    public static float getSentCount(Context context) {
+    public static int getSentCount(Context context) {
         return getPrefValue(context, PREF_SENT_COUNT, 0);
     }
-    public static void setSentCount(Context context,  float sentCount) {
+    public static void setSentCount(Context context,  int sentCount) {
         setPrefValue(context, PREF_SENT_COUNT, sentCount);
     }
-    public static void incrementProgressPercentage(Context context){
+    public static void incrementSentCount(Context context){
         setPrefValue(context, PREF_SENT_COUNT,
                 getPrefValue(context, PREF_SENT_COUNT, 0) + 1);
     }
 
-    public static float getFailedCount(Context context) {
+    public static int getFailedCount(Context context) {
         return getPrefValue(context, PREF_FAILED_COUNT, 0);
     }
-    public static void setFailedCount(Context context,  float failedCount) {
+    public static void setFailedCount(Context context,  int failedCount) {
         setPrefValue(context, PREF_FAILED_COUNT, failedCount);
     }
     public static void incrementFailedCount(Context context){
