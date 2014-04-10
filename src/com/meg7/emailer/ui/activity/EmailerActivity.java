@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.meg7.emailer.R;
+import com.meg7.emailer.ui.fragment.HeadlessFragment;
 import com.meg7.emailer.ui.fragment.ProgressFragment;
 import com.meg7.emailer.ui.fragment.SettingsFragment;
 
@@ -32,7 +33,11 @@ import com.meg7.emailer.ui.fragment.SettingsFragment;
  *
  * @author Mostafa Gazar
  */
-public class EmailerActivity extends FragmentActivity {
+public class EmailerActivity extends FragmentActivity implements HeadlessFragment.Callback {
+
+    private static final String TAG_FRAGMENT_HEADLESS = "headless";
+
+    private HeadlessFragment mHeadlessFragment;
 
     private FragmentsPagerAdapter mFragmentsAdapter;
 
@@ -40,6 +45,16 @@ public class EmailerActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        mHeadlessFragment = (HeadlessFragment) fragmentManager.findFragmentByTag(TAG_FRAGMENT_HEADLESS);
+
+        // If the Fragment is non-null, then it is currently being
+        // retained across a configuration change.
+        if (mHeadlessFragment == null) {
+            mHeadlessFragment = new HeadlessFragment();
+            fragmentManager.beginTransaction().add(mHeadlessFragment, TAG_FRAGMENT_HEADLESS).commit();
+        }
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         mFragmentsAdapter = new FragmentsPagerAdapter(getSupportFragmentManager());

@@ -13,144 +13,157 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header_blue_bg"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/settings"
+            android:textAllCaps="true"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/footer"
+        android:layout_below="@+id/header"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal"
-            android:background="@drawable/header_blue_bg">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/settings"
-                android:textColor="@color/white"
-                android:textAllCaps="true"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:gravity="center" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:background="@color/blue_lighter"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:background="@color/blue_lighter">
+            android:padding="16dp">
 
             <EditText
                 android:id="@+id/usernameEdt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
                 android:text="@string/default_email" />
 
             <EditText
                 android:id="@+id/passwordEdt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
                 android:layout_marginTop="8dp"
                 android:hint="@string/hint_password"
+                android:inputType="textPassword"
                 android:text="@string/default_password" />
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/blue" />
 
             <EditText
                 android:id="@+id/fromEmailEdt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:hint="@string/hint_from_email"
+                android:inputType="textEmailAddress"
                 android:text="@string/default_from_email" />
 
             <EditText
                 android:id="@+id/fromNameEdt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
                 android:layout_marginTop="8dp"
                 android:hint="@string/hint_from_name"
+                android:inputType="textPersonName"
                 android:text="@string/default_from_name" />
 
             <View
                 android:layout_width="32dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/blue" />
 
             <EditText
                 android:id="@+id/subjectEdt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailSubject"
                 android:hint="@string/hint_subject"
+                android:inputType="textEmailSubject"
                 android:text="@string/default_subject" />
 
             <EditText
                 android:id="@+id/messageEdt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
                 android:layout_marginTop="8dp"
                 android:hint="@string/hint_message"
+                android:inputType="textMultiLine"
                 android:lines="5"
                 android:text="@string/default_message" />
-
         </LinearLayout>
+    </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="-5dp"
+        android:background="@drawable/shadow_gray" />
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/footer_blue_bg"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/restoreDefaultsBtn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:background="@drawable/footer_blue_bg">
+            android:layout_weight="1"
+            android:background="@drawable/button_borderless_blue"
+            android:text="@string/restoreDefaults"
+            android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/restoreDefaultsBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/button_borderless_blue"
-                android:text="@string/restoreDefaults"
-                android:textColor="@color/white" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/blue_lighter" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/blue_lighter" />
-
-            <Button
-                android:id="@+id/updateBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/button_borderless_blue"
-                android:text="@string/update"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/updateBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_borderless_blue"
+            android:text="@string/update"
+            android:textColor="@color/white" />
     </LinearLayout>
-</ScrollView>
+
+</RelativeLayout>

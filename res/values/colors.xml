@@ -17,24 +17,26 @@
 <resources>
 
     <color name="text">#ffffff</color>
-    <color name="background">#1f253d</color>
+    <color name="background">#EBC45D</color><!-- 1f253d -->
 
     <!-- Colors -->
     <color name="white">#ffffff</color>
 
     <color name="gray">#787878</color>
 
+    <color name="shadow">#59787878</color>
+
+    <color name="actions_bar">#EAEAEA</color>
+
     <color name="turquoise">#11a8ab</color>
 
-    <color name="purple">#394264</color>
-    <color name="purple_lighter">#50597b</color>
+    <color name="purple">#047ccb</color><!-- 394264 -->
+    <color name="purple_lighter">#048be4</color><!-- 50597b -->
 
-    <color name="red">#cc324b</color>
-    <color name="red_lighter">#e64c65</color>
+    <color name="red">#fb2037</color><!-- cc324b -->
+    <color name="red_lighter">#fb394d</color><!-- e64c65 -->
 
-    <color name="blue">#1a4e95</color>
-    <color name="blue_lighter">#3468af</color>
-
-
+    <color name="blue">#1C8FDC</color><!-- 1a4e95 -->
+    <color name="blue_lighter">#20A4FB</color><!-- 3468af -->
 
 </resources>
