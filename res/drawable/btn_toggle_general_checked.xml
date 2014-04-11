@@ -24,6 +24,6 @@
         android:bottomRightRadius="5dp"
         android:topRightRadius="5dp" />
 
-    <solid android:color="@color/blue_lighter" />
+    <solid android:color="@color/green" />
 
 </shape>
