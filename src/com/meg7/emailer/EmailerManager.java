@@ -19,6 +19,7 @@ package com.meg7.emailer;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.meg7.emailer.util.Constants;
@@ -27,6 +28,7 @@ import com.meg7.emailer.util.ProgressPreferenceUtils;
 import com.meg7.emailer.util.Scheduler;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -123,7 +125,7 @@ public class EmailerManager extends TaskerManager {
     }
 
     @Override
-    protected int getCyclesCount() {
+    public int getCyclesCount() {
         try {
             return mContext.getAssets().list("tasks").length;
         } catch (IOException ignore) {
@@ -137,7 +139,7 @@ public class EmailerManager extends TaskerManager {
         InputStream inputStream = null;
         BufferedReader reader = null;
         try {
-            inputStream = mContext.getAssets().open(fileName);
+            inputStream = mContext.getAssets().open("tasks" + File.separator + fileName);
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
@@ -169,14 +171,11 @@ public class EmailerManager extends TaskerManager {
     }
 
     private void sendMessages(List<Message> messages) {
-        ProgressPreferenceUtils.setProgressPercentage(mContext, 0);
-        ProgressPreferenceUtils.setSentCount(mContext, 0);
-        ProgressPreferenceUtils.setFailedCount(mContext, 0);
+        resetProgress(mContext);
 
         int position = 0;
         int count = messages.size();
         for (Message message : messages) {
-            ProgressPreferenceUtils.setProgressPercentage(mContext, position * 100 / count);
             position += 1;
 
             try {
@@ -189,8 +188,25 @@ public class EmailerManager extends TaskerManager {
                 MLog.e(TAG, e.toString());
             }
 
-            mContext.sendBroadcast(new Intent(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
+            ProgressPreferenceUtils.setProgressPercentage(mContext, position * 100 / count);
+
+            if (!TaskerHelper.isTaskerRunning(mContext)) {
+                resetProgress(mContext);
+                return;
+            }
+
+            LocalBroadcastManager.getInstance(mContext).
+                    sendBroadcast(new Intent(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
         }
+    }
+
+    public static void resetProgress(Context context) {
+        ProgressPreferenceUtils.setProgressPercentage(context, 0);
+        ProgressPreferenceUtils.setSentCount(context, 0);
+        ProgressPreferenceUtils.setFailedCount(context, 0);
+
+        LocalBroadcastManager.getInstance(context).
+                sendBroadcast(new Intent(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
     }
 
     public static class PreferenceUtils {

@@ -49,7 +49,7 @@ public abstract class TaskerManager {
 
     protected abstract void processCycle(int cycle);
 
-    protected abstract int getCyclesCount();
+    public abstract int getCyclesCount();
 
     public int getCyclesProcessedTodaySoFar() {
         return PreferenceManager.getDefaultSharedPreferences(mContext).

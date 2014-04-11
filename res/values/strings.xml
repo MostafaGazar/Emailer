@@ -8,6 +8,7 @@
 
     <!-- Main Activity -->
     <string name="actions_title">Oh spam!</string>
+    <string name="runningCycle">Running cycle: %s</string>
 
     <!-- Settings fragment -->
     <string name="settings">Settings</string>

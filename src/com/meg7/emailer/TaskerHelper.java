@@ -39,6 +39,8 @@ public class TaskerHelper {
             return;
         }
 
+        EmailerManager.resetProgress(context);
+
         final Intent i = new Intent(context, TaskerService.class);
         context.startService(i);
 
@@ -49,9 +51,16 @@ public class TaskerHelper {
     }
 
     public static void cancelFutureTasks(Context context) {
+        if (context == null) {
+            MLog.w(TAG, "Failed to stop future tasks, context is null");
+            return;
+        }
+
+        EmailerManager.resetProgress(context);
+
         Scheduler.cancelScheduledWakes(context);
 
-        // FIXME :: We did not stop current cycle so that might be running.
+        // XXX :: We did not really stop current cycle so that might be running.
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(PREF_IS_RUNNING, false)

@@ -23,8 +23,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.meg7.emailer.EmailerManager;
 import com.meg7.emailer.R;
 import com.meg7.emailer.TaskerHelper;
 import com.meg7.emailer.ui.fragment.HeadlessFragment;
@@ -44,6 +46,7 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
 
     private FragmentsPagerAdapter mFragmentsAdapter;
 
+    private TextView mRunningCycleLbl;
     private ToggleButton mRunTglBtn;
 
     @Override
@@ -64,6 +67,13 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         mFragmentsAdapter = new FragmentsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(mFragmentsAdapter);
+
+        EmailerManager taskerManager = new EmailerManager(this);
+        mRunningCycleLbl = (TextView) findViewById(R.id.runningCycleLbl);
+        mRunningCycleLbl.setText(getString(R.string.runningCycle,
+                taskerManager.getCyclesProcessedTodaySoFar() + "/" +
+                        taskerManager.getLastProcessedCycle() + "/" +
+                        taskerManager.getCyclesCount()));
 
         mRunTglBtn = (ToggleButton) findViewById(R.id.runTglBtn);
         mRunTglBtn.setChecked(TaskerHelper.isTaskerRunning(this));
