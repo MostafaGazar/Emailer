@@ -66,6 +66,7 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
         pager.setAdapter(mFragmentsAdapter);
 
         mRunTglBtn = (ToggleButton) findViewById(R.id.runTglBtn);
+        mRunTglBtn.setChecked(TaskerHelper.isTaskerRunning(this));
         mRunTglBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

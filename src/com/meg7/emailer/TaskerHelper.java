@@ -18,6 +18,7 @@ package com.meg7.emailer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 import com.meg7.emailer.service.TaskerService;
 import com.meg7.emailer.util.MLog;
@@ -30,6 +31,8 @@ public class TaskerHelper {
 
     private static final String TAG = TaskerHelper.class.getSimpleName();
 
+    private static final String PREF_IS_RUNNING = "isTaskerRunning";
+
     public static void startTasker(Context context) {
         if (context == null) {
             MLog.w(TAG, "Couldn't start service, context is null");
@@ -38,10 +41,25 @@ public class TaskerHelper {
 
         final Intent i = new Intent(context, TaskerService.class);
         context.startService(i);
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_IS_RUNNING, true)
+                .commit();
     }
 
     public static void cancelFutureTasks(Context context) {
         Scheduler.cancelScheduledWakes(context);
+
+        // FIXME :: We did not stop current cycle so that might be running.
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_IS_RUNNING, false)
+                .commit();
+    }
+
+    public static boolean isTaskerRunning(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_IS_RUNNING, false);
     }
 
 }
