@@ -21,7 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 
-import com.meg7.emailer.service.TaskerService;
+import com.meg7.emailer.TaskerHelper;
 import com.meg7.emailer.util.ConnectionHelper;
 import com.meg7.emailer.util.MLog;
 
@@ -50,9 +50,8 @@ public class ConnectivityReceiver extends BroadcastReceiver {
         if (isConnected) {
             ConnectionHelper.unregisterConnectivityListener(context.getApplicationContext());
 
-            // Start Emailer service.
-            final Intent updaterIntent = new Intent(context, TaskerService.class);
-            context.startService(updaterIntent);
+            // Start Tasker service.
+            TaskerHelper.startTasker(context);
         }
     }
 }
