@@ -5,8 +5,7 @@ General task plainer thingy with scheduled emails sender just as sample! Mainly 
 
 Screenshots
 ------------
-![main](https://dl.dropboxusercontent.com/u/31123652/Emailer/1.png)
-![main](https://dl.dropboxusercontent.com/u/31123652/Emailer/2.png)
+![main](https://dl.dropboxusercontent.com/u/31123652/Emailer/1.png)_ ![main](https://dl.dropboxusercontent.com/u/31123652/Emailer/2.png)
 ![main](https://dl.dropboxusercontent.com/u/31123652/Emailer/3.png)
 
 Developed by
