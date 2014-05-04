@@ -44,6 +44,7 @@ public class TaskerHelper {
         final Intent i = new Intent(context, TaskerService.class);
         context.startService(i);
 
+        // XXX Would not it make more sense to move this inside the service where the actual magic happens.
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(PREF_IS_RUNNING, true)

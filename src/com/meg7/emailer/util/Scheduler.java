@@ -21,6 +21,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.meg7.emailer.service.TaskerService;
+
 import java.util.Calendar;
 
 /**
@@ -43,11 +45,10 @@ public class Scheduler {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, threshold);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), getEmailerWakeIntent(context));
+        calendar.add(Calendar.MILLISECOND, threshold);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), getEmailerWakeIntent(context));
 
-        MLog.d(TAG, "Emailer scheduled in " + threshold / 60 + " minutes");
+        MLog.d(TAG, "Emailer scheduled in " + threshold / (60 * 1000) + " minutes");
     }
 
     public static void cancelScheduledWakes(Context context) {
@@ -56,8 +57,8 @@ public class Scheduler {
     }
 
     private static PendingIntent getEmailerWakeIntent(Context context) {
-        Intent intent = new Intent(Constants.INTENT_ACTION_WAKE_TASKER_UP);
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, TaskerService.class);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 }

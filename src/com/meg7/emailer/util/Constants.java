@@ -29,7 +29,7 @@ public class Constants {
     public static final String PREF_LAST_PROCESSED_CYCLE = "lastProcessedCycle";
 
     // Intents
-    public static final String INTENT_ACTION_WAKE_TASKER_UP = "com.meg7.emailer.action.ACTION_WAKE_TASKER_UP";
+//    public static final String INTENT_ACTION_WAKE_TASKER_UP = "com.meg7.emailer.action.ACTION_WAKE_TASKER_UP";
     public static final String ACTION_PROGRESS = "com.meg7.emailer.action.ACTION_PROGRESS";
 
     // Thresholds
