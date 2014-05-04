@@ -16,11 +16,16 @@
 
 package com.meg7.emailer.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -32,6 +37,7 @@ import com.meg7.emailer.TaskerHelper;
 import com.meg7.emailer.ui.fragment.HeadlessFragment;
 import com.meg7.emailer.ui.fragment.ProgressFragment;
 import com.meg7.emailer.ui.fragment.SettingsFragment;
+import com.meg7.emailer.util.Constants;
 
 /**
  * Main activity, mainly fragments container.
@@ -68,12 +74,7 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
         mFragmentsAdapter = new FragmentsPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(mFragmentsAdapter);
 
-        EmailerManager taskerManager = new EmailerManager(this);
         mRunningCycleLbl = (TextView) findViewById(R.id.runningCycleLbl);
-        mRunningCycleLbl.setText(getString(R.string.runningCycle,
-                taskerManager.getCyclesProcessedTodaySoFar() + "/" +
-                        taskerManager.getLastProcessedCycle() + "/" +
-                        taskerManager.getCyclesCount()));
 
         mRunTglBtn = (ToggleButton) findViewById(R.id.runTglBtn);
         mRunTglBtn.setChecked(TaskerHelper.isTaskerRunning(this));
@@ -89,6 +90,41 @@ public class EmailerActivity extends FragmentActivity implements HeadlessFragmen
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateProgress();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mProgressReceiver,
+                new IntentFilter(Constants.ACTION_PROGRESS));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mProgressReceiver);
+    }
+
+    private BroadcastReceiver mProgressReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (Constants.ACTION_PROGRESS.equals(action)) {
+                updateProgress();
+            }
+        }
+    };
+
+    private void updateProgress() {
+        EmailerManager taskerManager = new EmailerManager(this);
+        mRunningCycleLbl.setText(getString(R.string.runningCycle,
+                taskerManager.getCyclesProcessedTodaySoFar() + "/" +
+                        taskerManager.getLastProcessedCycle() + "/" +
+                        taskerManager.getCyclesCount()));
     }
 
     private class FragmentsPagerAdapter extends FragmentStatePagerAdapter {

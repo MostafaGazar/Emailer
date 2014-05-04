@@ -33,8 +33,6 @@ import com.meg7.emailer.R;
 import com.meg7.emailer.util.Constants;
 import com.meg7.emailer.util.ProgressPreferenceUtils;
 
-import java.text.NumberFormat;
-
 /**
  * Fragment for showing stats.
  *
@@ -83,7 +81,7 @@ public class ProgressFragment extends Fragment {
         updateProgress();
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProgressReceiver,
-                new IntentFilter(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
+                new IntentFilter(Constants.ACTION_PROGRESS));
     }
 
     @Override
@@ -98,7 +96,7 @@ public class ProgressFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (Constants.ACTION_UPDATE_PROGRESS_FRAGMENT.equals(action)) {
+            if (Constants.ACTION_PROGRESS.equals(action)) {
                 updateProgress();
             }
         }

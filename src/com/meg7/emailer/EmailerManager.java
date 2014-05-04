@@ -65,6 +65,16 @@ public class EmailerManager extends TaskerManager {
     }
 
     @Override
+    public int processCycleAndScheduleNext() {
+        int result =  super.processCycleAndScheduleNext();
+
+        LocalBroadcastManager.getInstance(mContext).
+                sendBroadcast(new Intent(Constants.ACTION_PROGRESS));
+
+        return result;
+    }
+
+    @Override
     protected void processCycle(int cycle) {
         // Do your thing here.
         final String username = PreferenceUtils.getEmailUsername(mContext);
@@ -196,7 +206,7 @@ public class EmailerManager extends TaskerManager {
             }
 
             LocalBroadcastManager.getInstance(mContext).
-                    sendBroadcast(new Intent(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
+                    sendBroadcast(new Intent(Constants.ACTION_PROGRESS));
         }
     }
 
@@ -206,7 +216,7 @@ public class EmailerManager extends TaskerManager {
         ProgressPreferenceUtils.setFailedCount(context, 0);
 
         LocalBroadcastManager.getInstance(context).
-                sendBroadcast(new Intent(Constants.ACTION_UPDATE_PROGRESS_FRAGMENT));
+                sendBroadcast(new Intent(Constants.ACTION_PROGRESS));
     }
 
     public static class PreferenceUtils {
